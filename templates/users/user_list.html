@@ -1,0 +1,59 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0"><i class="bi bi-person-lines-fill me-2 text-primary"></i>All Users</h4>
+    <a href="{% url 'user-create-template' %}" class="btn btn-primary px-4">
+        <i class="bi bi-plus-circle me-1"></i> Add User
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        {% if users %}
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Created At</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td class="ps-4"><span class="badge-id">{{ user.id }}</span></td>
+                    <td class="fw-semibold">{{ user.name }}</td>
+                    <td><i class="bi bi-envelope me-1 text-muted"></i>{{ user.email }}</td>
+                    <td>
+                        {% if user.phone %}
+                            <i class="bi bi-telephone me-1 text-muted"></i>{{ user.phone }}
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-muted small">{{ user.created_at|date:"M d, Y H:i" }}</td>
+                    <td class="text-center">
+                        <a href="{% url 'user-edit-template' user.pk %}" class="btn btn-sm btn-outline-primary me-1">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                        <a href="{% url 'user-delete-template' user.pk %}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash3"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            No users found. <a href="{% url 'user-create-template' %}">Add one now</a>.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-white py-3 border-0">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-person-{% if user %}pencil{% else %}plus-fill{% endif %} me-2 text-primary"></i>
+                    {% if user %}Edit User{% else %}Create New User{% endif %}
+                </h5>
+            </div>
+            <div class="card-body px-4 pb-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" name="name" value="{{ user.name|default:'' }}"
+                               class="form-control {% if errors.name %}is-invalid{% endif %}"
+                               placeholder="Enter full name" required>
+                        {% if errors.name %}<div class="invalid-feedback">{{ errors.name }}</div>{% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                        <input type="email" name="email" value="{{ user.email|default:'' }}"
+                               class="form-control {% if errors.email %}is-invalid{% endif %}"
+                               placeholder="Enter email address" required>
+                        {% if errors.email %}<div class="invalid-feedback">{{ errors.email }}</div>{% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Phone <span class="text-muted small">(optional)</span></label>
+                        <input type="text" name="phone" value="{{ user.phone|default:'' }}"
+                               class="form-control {% if errors.phone %}is-invalid{% endif %}"
+                               placeholder="Enter phone number">
+                        {% if errors.phone %}<div class="invalid-feedback">{{ errors.phone }}</div>{% endif %}
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-check-circle me-1"></i>
+                            {% if user %}Update{% else %}Create{% endif %}
+                        </button>
+                        <a href="{% url 'user-list-template' %}" class="btn btn-outline-secondary px-4">
+                            <i class="bi bi-x-circle me-1"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
