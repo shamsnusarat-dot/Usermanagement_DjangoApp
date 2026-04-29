@@ -21,6 +21,16 @@
         <a class="navbar-brand fw-bold fs-4" href="{% url 'user-list-template' %}">
             <i class="bi bi-people-fill me-2"></i>User Management
         </a>
+        {% if request.session.user %}
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-white small">
+                <i class="bi bi-person-circle me-1"></i>{{ request.session.user.name }}
+            </span>
+            <a href="{% url 'ms-logout' %}" class="btn btn-sm btn-outline-light">
+                <i class="bi bi-box-arrow-right me-1"></i>Logout
+            </a>
+        </div>
+        {% endif %}
     </nav>
     <div class="container">
         {% if messages %}

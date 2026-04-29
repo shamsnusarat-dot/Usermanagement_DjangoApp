@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +31,15 @@ SECRET_KEY = 'django-insecure-4350#l8@%u0gtzqai7m^viha@7hejl8@vy2ie^k#=zd9ko2pxh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    "https://django-demo-app-cnfeddg9f0e7ckec.southindia-01.azurewebsites.net"
+]
+
+ALLOWED_HOSTS = [
+    "django-demo-app-cnfeddg9f0e7ckec.southindia-01.azurewebsites.net"
+]
+
+
 
 # Application definition
 
@@ -75,8 +89,12 @@ WSGI_APPLICATION = 'user_management.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'postgres'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -116,3 +134,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Microsoft Entra ID (Azure AD) settings
+AZURE_CLIENT_ID = os.getenv('AZURE_CLIENT_ID')
+AZURE_CLIENT_SECRET = os.getenv('AZURE_CLIENT_SECRET')
+AZURE_TENANT_ID = os.getenv('AZURE_TENANT_ID')
+AZURE_REDIRECT_URI = os.getenv('AZURE_REDIRECT_URI', 'http://localhost:8000/auth/callback/')
+AZURE_AUTHORITY = f"https://login.microsoftonline.com/{os.getenv('AZURE_TENANT_ID')}"
+AZURE_SCOPE = ['User.Read']
+
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
